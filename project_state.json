@@ -1,0 +1,147 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Professional hospital website for SAMPARC MEDICAL with admin dashboard, AI chat assistant, medicine management, and full content management capabilities.",
+  "architectural_notes": [
+    "Hospital: SAMPARC MEDICAL | Email: samparc6@gmail.com | Address: Nearby Malavali Railway Station, Samparc Malavali Campus, Near Malavli, Malavli, Maharashtra 410405",
+    "Founder/Director/Secretary: AMITKUMAR BANERJEE | CEO: ANUJ SINGH",
+    "Admin login credentials: gauravsaswade2009@gmail.com / p1love2g"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Professional medical logo with a green caduceus or cross symbol, gold accent lines, and the text 'SAMPARC MEDICAL' in bold clean font on white background (samparc-medical-logo.dim_400x120.png)\n- Hospital hero banner with a clean modern medical facility interior, soft teal and white tones, professional and calming atmosphere (hero-banner.dim_1440x600.png)\n- Professional portrait placeholder silhouette for founder bio card with medical theme teal background (founder-avatar.dim_200x200.png)\n- Professional portrait placeholder silhouette for CEO bio card with medical theme gold background (ceo-avatar.dim_200x200.png)",
+  "existing_features": [
+    {
+      "id": "feature-create-a-professional-animated-and-visually-attractive-public-facing-hospital-website-for-samparc-medical-with-a-clean-medical-theme-white-teal-green-and-gold-accents-smooth-scroll-animations-hero-section-and-consistent-typography-throughout-all-pages",
+      "title": "Create a professional, animated, and visually attractive public-facing hospital website for SAMPARC MEDICAL with a clean medical theme (white, teal/green, and gold accents), smooth scroll animations, hero section, and consistent typography throughout all pages.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-design-and-generate-a-custom-logo-for-samparc-medical-a-medical-cross-or-caduceus-symbol-combined-with-the-hospital-name-and-display-it-prominently-in-the-header-navbar-of-the-website",
+      "title": "Design and generate a custom logo for SAMPARC MEDICAL (a medical cross or caduceus symbol combined with the hospital name) and display it prominently in the header/navbar of the website.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-about-us-section-on-the-public-website-featuring-professional-bios-for-founder-director-secretary-amitkumar-banerjee-and-ceo-anuj-singh-with-positive-professionally-written-descriptions-about-their-vision-leadership-and-contributions-to-healthcare",
+      "title": "Add an 'About Us' section on the public website featuring professional bios for Founder Director/Secretary AMITKUMAR BANERJEE and CEO ANUJ SINGH, with positive, professionally written descriptions about their vision, leadership, and contributions to healthcare.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-contact-section-on-the-public-website-displaying-hospital-address-samparc-medical-nearby-malavali-railway-station-samparc-malavali-campus-near-malavli-malavli-maharashtra-410405-email-samparc6-gmail-com-customer-care-phone-91-9766343454-customer-care-whatsapp-link-91-9766343454-cross-whatsapp-link-91-9270556455-and-ceo-contact-whatsapp-91-9766343456",
+      "title": "Add a Contact section on the public website displaying: hospital address (SAMPARC MEDICAL, Nearby Malavali Railway Station, Samparc Malavali Campus, Near Malavli, Malavli, Maharashtra 410405), email (samparc6@gmail.com), customer care phone (+91 9766343454), customer care WhatsApp link (+91 9766343454), cross WhatsApp link (+91 9270556455), and CEO contact/WhatsApp (+91 9766343456).",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-an-ai-chat-assistant-widget-on-the-public-website-floating-button-in-the-bottom-right-corner-that-allows-customers-to-ask-questions-about-the-hospital-services-medicines-and-general-health-queries-the-assistant-should-respond-helpfully-using-pre-defined-knowledge-and-scripted-responses-about-samparc-medical-it-should-also-be-able-to-answer-general-medical-faq-questions",
+      "title": "Implement an AI chat assistant widget on the public website (floating button in the bottom-right corner) that allows customers to ask questions about the hospital, services, medicines, and general health queries. The assistant should respond helpfully using pre-defined knowledge and scripted responses about SAMPARC MEDICAL. It should also be able to answer general medical FAQ questions.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-medicines-pharmacy-section-on-the-public-website-that-displays-the-list-of-available-medicines-stored-in-the-backend-with-name-description-and-price-fields-visible-to-visitors",
+      "title": "Create a Medicines/Pharmacy section on the public website that displays the list of available medicines stored in the backend, with name, description, and price fields visible to visitors.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-protected-admin-dashboard-accessible-at-admin-route-login-is-protected-by-hardcoded-credentials-email-gauravsaswade2009-gmail-com-and-password-p1love2g-the-dashboard-must-be-accessible-from-any-device-browser-on-successful-login-show-the-admin-panel-on-failure-show-an-error-message",
+      "title": "Build a protected Admin Dashboard accessible at /admin route. Login is protected by hardcoded credentials: email (gauravsaswade2009@gmail.com) and password (p1love2g). The dashboard must be accessible from any device/browser. On successful login, show the admin panel; on failure, show an error message.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-admin-dashboard-ui-with-the-following-management-sections-1-medicines-manager-add-edit-delete-medicines-with-a-form-and-table-2-website-content-editor-edit-hero-text-about-section-text-services-list-and-announcements-3-overview-panel-showing-medicine-count-and-quick-stats-all-changes-must-persist-via-backend-canister-calls",
+      "title": "Build the Admin Dashboard UI with the following management sections: (1) Medicines Manager — add, edit, delete medicines with a form and table; (2) Website Content Editor — edit hero text, about section text, services list, and announcements; (3) Overview panel showing medicine count and quick stats. All changes must persist via backend canister calls.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-services-section-on-the-public-website-showcasing-hospital-services-e-g-general-medicine-emergency-care-pharmacy-diagnostics-patient-consultation-with-icons-and-short-descriptions-this-content-should-be-editable-from-the-admin-dashboard",
+      "title": "Add a Services section on the public website showcasing hospital services (e.g., General Medicine, Emergency Care, Pharmacy, Diagnostics, Patient Consultation) with icons and short descriptions. This content should be editable from the admin dashboard.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-site-wide-footer-with-hospital-name-samparc-medical-address-email-phone-numbers-whatsapp-links-social-contact-quick-links-and-a-copyright-notice-include-a-positive-tagline-about-samparc-medical",
+      "title": "Add a site-wide footer with hospital name (SAMPARC MEDICAL), address, email, phone numbers, WhatsApp links, social/contact quick links, and a copyright notice. Include a positive tagline about SAMPARC MEDICAL.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Professional animated hospital website for SAMPARC MEDICAL with logo, founder/CEO bios, contact info, address, and menu navigation",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Admin dashboard with login (gauravsaswade2009@gmail.com / p1love2g) for managing medicines, editing website content, accessible from anywhere",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "AI chat assistant on website for customer queries (ChatGPT-like, can answer questions and generate content)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Contact/WhatsApp integration: customer care (+91 9766343454), cross WhatsApp (+91 9270556455), CEO contact/WhatsApp (+91 9766343456)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Custom logo for SAMPARC MEDICAL displayed prominently on the website",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Implement backend storage for medicines in the Motoko main actor with full CRUD operations: add medicine, edit medicine, delete medicine, and list all medicines. Each medicine record should have: id, name, description, price, category, and availability status.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Implement backend storage for editable website content sections (hero text, about text, services list, announcements) in the Motoko main actor so the admin can update public-facing content. Provide getContent and updateContent functions keyed by section name.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "SAMPARC MEDICAL",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

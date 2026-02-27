@@ -1,0 +1,11 @@
+{
+  "frontend/src/components/Layout.tsx": "Main site layout with sticky header, navigation, footer with contact info, and chat assistant. Fixed: replaced `require()` import with proper ES module `Outlet` import from `@tanstack/react-router`, and replaced all `flex-shrink-0` with `shrink-0`.",
+  "frontend/src/components/ChatAssistant.tsx": "Floating AI chat assistant widget with message history, typing indicator, and quick-question shortcuts. Fixed: replaced all `flex-shrink-0` with `shrink-0` per Tailwind v3 migration requirements.",
+  "frontend/src/pages/About.tsx": "About Us page featuring founder AMITKUMAR BANERJEE and CEO ANUJ SINGH bios, core values, and achievements. Fixed: replaced `flex-shrink-0` with `shrink-0` on the CheckCircle icon.",
+  "frontend/src/pages/admin/AdminLogin.tsx": "Admin login page with email/password form, credential validation, and redirect to dashboard on success. Fixed: replaced `flex-shrink-0` with `shrink-0` on the AlertCircle icon.",
+  "frontend/src/pages/admin/Overview.tsx": "Admin dashboard overview panel showing medicine stats (total, in-stock, out-of-stock, categories), a quick actions guide, recent medicines list, and hospital info summary card.",
+  "frontend/src/pages/admin/MedicinesManager.tsx": "Admin medicines management page with a searchable table of all medicines, inline add/edit form with all fields (name, description, price, category, availability toggle), and delete confirmation flow with toast notifications.",
+  "frontend/src/pages/admin/ContentEditor.tsx": "Admin content editor page allowing editing of website text sections (hero, about, services, announcements) with per-section save buttons and a save-all action, synced to the backend canister with toast feedback.",
+  "frontend/src/index.css": "Global stylesheet with Tailwind directives, OKLCH color system CSS variables for light/dark modes, smooth scroll, and custom animation keyframes (slideDown, pulse-slow). This file is now correctly located at `src/index.css` where `main.tsx` imports it from.",
+  "frontend/tailwind.config.js": "Tailwind configuration extending the default theme with OKLCH color tokens, custom medical theme colors (`medical-primary`, `medical-dark`, `medical-light`, `gold`, `gold-light`, `gold-dark`), medical shadow, and animation utilities used throughout the app."
+}

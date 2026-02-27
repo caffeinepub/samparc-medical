@@ -1,0 +1,270 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "SAMPARC MEDICAL Hospital Website with Admin Dashboard & AI Assistant - Frontend Implementation",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Create professional, animated hospital website with medical theme and consistent design system",
+      "acceptanceCriteria": [
+        "Hero section has animated entrance with hospital name and tagline",
+        "Smooth scroll animations on all major sections",
+        "Consistent color palette of white, teal/green, and gold used site-wide",
+        "Responsive design works on mobile, tablet, and desktop",
+        "Navigation menu has buttons: Home, About Us, Services, Medicines, Contact Us, Admin"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Configure custom medical theme colors (teal/green primary, gold accent, white background) and enable animation utilities for smooth scroll and entrance effects"
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Add global styles for smooth scroll behavior, typography system with consistent font hierarchy, and base animation keyframes for entrance effects"
+        },
+        {
+          "path": "frontend/src/components/Layout.tsx",
+          "operation": "create",
+          "description": "Create main layout component with header/navbar containing navigation buttons (Home, About Us, Services, Medicines, Contact Us, Admin), logo placement, and footer. Apply medical theme styling and responsive design"
+        },
+        {
+          "path": "frontend/src/components/Hero.tsx",
+          "operation": "create",
+          "description": "Create hero section component with animated entrance effects, hospital name, tagline, and call-to-action. Fetch hero text content from backend using getContent('hero')"
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Set up React Router with routes for Home (/), About Us (/about), Services (/services), Medicines (/medicines), Contact Us (/contact), and Admin (/admin). Wrap routes with Layout component"
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Display custom generated SAMPARC MEDICAL logo in header/navbar",
+      "acceptanceCriteria": [
+        "Logo is displayed in the top navigation bar",
+        "Logo includes a medical symbol and the text 'SAMPARC MEDICAL'",
+        "Logo is served from frontend/public/assets/generated"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Layout.tsx",
+          "operation": "modify",
+          "description": "Add logo image element in header/navbar referencing the generated logo at frontend/public/assets/generated/samparc-medical-logo.dim_400x120.png with appropriate sizing and alt text"
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Create About Us section with founder and CEO professional bios",
+      "acceptanceCriteria": [
+        "Section displays AMITKUMAR BANERJEE as Founder Director/Secretary with a bio",
+        "Section displays ANUJ SINGH as CEO with a bio",
+        "Both bios are professionally written and highlight their healthcare leadership",
+        "Section is visually appealing with cards or profile layout"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/About.tsx",
+          "operation": "create",
+          "description": "Create About Us page with leadership section featuring profile cards for AMITKUMAR BANERJEE (Founder Director/Secretary) and ANUJ SINGH (CEO). Include professional bios highlighting vision and healthcare leadership. Use generated avatar images at frontend/public/assets/generated/founder-avatar.dim_200x200.png and frontend/public/assets/generated/ceo-avatar.dim_200x200.png. Fetch about text from backend using getContent('about')"
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register /about route to render About page component"
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Create Contact section displaying hospital address, email, and multiple phone/WhatsApp numbers",
+      "acceptanceCriteria": [
+        "Address is displayed correctly",
+        "Email samparc6@gmail.com is shown and clickable as mailto link",
+        "Customer care number +91 9766343454 is shown with a WhatsApp link",
+        "Cross WhatsApp +91 9270556455 is shown with a WhatsApp link",
+        "CEO contact +91 9766343456 is shown with phone and WhatsApp links",
+        "WhatsApp links open wa.me URLs in a new tab"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Contact.tsx",
+          "operation": "create",
+          "description": "Create Contact page displaying hospital address (SAMPARC MEDICAL, Nearby Malavali Railway Station, Samparc Malavali Campus, Near Malavli, Malavli, Maharashtra 410405), email (samparc6@gmail.com) as mailto link, customer care (+91 9766343454), cross WhatsApp (+91 9270556455), and CEO contact (+91 9766343456) with wa.me WhatsApp links opening in new tabs"
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register /contact route to render Contact page component"
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Implement frontend-only AI chat assistant widget for hospital and health queries",
+      "acceptanceCriteria": [
+        "Floating chat button visible on all public pages",
+        "Chat window opens with a greeting from the SAMPARC MEDICAL assistant",
+        "Handles questions about hospital location, hours, services, contact info",
+        "Displays customer care number +91 9766343454 when asked about support",
+        "Shows a message for unanswerable queries suggesting to call/WhatsApp",
+        "Chat history persists within the session"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/ChatAssistant.tsx",
+          "operation": "create",
+          "description": "Create AI chat assistant widget component with floating button (bottom-right corner), chat window UI, and local pattern-matching logic to answer hospital FAQs (location, services, contact info, hours). Store chat history in component state. Display customer care number +91 9766343454 for support queries. Include fallback message for unanswerable questions"
+        },
+        {
+          "path": "frontend/src/utils/chatResponses.ts",
+          "operation": "create",
+          "description": "Create scripted response patterns and knowledge base for SAMPARC MEDICAL assistant covering hospital info, services, medicines, contact details, and general health FAQs. Use keyword matching to trigger appropriate responses"
+        },
+        {
+          "path": "frontend/src/components/Layout.tsx",
+          "operation": "modify",
+          "description": "Include ChatAssistant component in Layout so it appears on all public pages"
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Create public Medicines/Pharmacy page displaying medicine catalog from backend",
+      "acceptanceCriteria": [
+        "Public medicines page lists all medicines added by admin",
+        "Each medicine card shows name, description, and price",
+        "Page is responsive and styled consistently with the site theme",
+        "Medicines data is fetched from the backend canister"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Medicines.tsx",
+          "operation": "create",
+          "description": "Create public Medicines page that fetches medicine list from backend using listMedicines(), displays medicine cards with name, description, and price formatted from bigint. Apply responsive grid layout and medical theme styling"
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register /medicines route to render Medicines page component"
+        }
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "summary": "Build protected Admin Dashboard with hardcoded credential login",
+      "acceptanceCriteria": [
+        "Login form at /admin with email and password fields",
+        "Credentials validated against gauravsaswade2009@gmail.com / p1love2g",
+        "Invalid credentials show an error message",
+        "Valid login stores session in localStorage and redirects to /admin/dashboard",
+        "Dashboard is inaccessible without login (redirect to /admin on unauthenticated access)",
+        "Logout button clears session"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/admin/AdminLogin.tsx",
+          "operation": "create",
+          "description": "Create admin login page with email and password form. Validate credentials against gauravsaswade2009@gmail.com and p1love2g. On success, store auth token in localStorage and redirect to /admin/dashboard. Show error message on failure"
+        },
+        {
+          "path": "frontend/src/hooks/useAuth.ts",
+          "operation": "create",
+          "description": "Create authentication hook managing localStorage session state, login/logout functions, and isAuthenticated boolean flag"
+        },
+        {
+          "path": "frontend/src/components/ProtectedRoute.tsx",
+          "operation": "create",
+          "description": "Create protected route wrapper component that checks authentication status using useAuth hook and redirects to /admin if not authenticated"
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register /admin route for AdminLogin and /admin/dashboard route wrapped with ProtectedRoute component"
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Build Admin Dashboard UI with medicines manager, content editor, and overview panel",
+      "acceptanceCriteria": [
+        "Sidebar navigation with: Overview, Medicines, Content Editor sections",
+        "Medicines section shows table of all medicines with Edit and Delete buttons",
+        "Add Medicine form with fields: name, description, price, category, availability",
+        "Content Editor shows text areas for each editable section with a Save button",
+        "Changes reflect on the public website after saving",
+        "Success/error toast notifications on all operations"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/admin/Dashboard.tsx",
+          "operation": "create",
+          "description": "Create admin dashboard layout with sidebar navigation for Overview, Medicines, and Content Editor sections. Include logout button in header"
+        },
+        {
+          "path": "frontend/src/pages/admin/Overview.tsx",
+          "operation": "create",
+          "description": "Create overview panel displaying medicine count and quick stats fetched from backend using listMedicines(). Show summary cards with key metrics"
+        },
+        {
+          "path": "frontend/src/pages/admin/MedicinesManager.tsx",
+          "operation": "create",
+          "description": "Create medicines management page with table listing all medicines (fetch via listMedicines()), Add Medicine form with fields (name, description, price as number, category, available checkbox), Edit and Delete buttons per row. Call backend addMedicine(), editMedicine(), and deleteMedicine() functions. Show toast notifications on success/error"
+        },
+        {
+          "path": "frontend/src/pages/admin/ContentEditor.tsx",
+          "operation": "create",
+          "description": "Create content editor page with text areas for editable sections (hero, about, services, announcements). Fetch current content using getAllContent() on load, save changes via updateContent(section, content). Show toast notifications on save"
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register admin dashboard child routes: /admin/dashboard/overview, /admin/dashboard/medicines, /admin/dashboard/content under protected Dashboard component"
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Add Services section on homepage showcasing hospital services with icons",
+      "acceptanceCriteria": [
+        "Services section visible on the homepage",
+        "At least 6 service cards with icons and descriptions",
+        "Content pulled from backend content store",
+        "Visually consistent with site theme"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Home.tsx",
+          "operation": "create",
+          "description": "Create homepage with Hero component and Services section displaying at least 6 service cards (General Medicine, Emergency Care, Pharmacy, Diagnostics, Patient Consultation, etc.) with icons and descriptions. Fetch services content from backend using getContent('services'). Use generated hero banner image at frontend/public/assets/generated/hero-banner.dim_1440x600.png in Hero section"
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register / route to render Home page component as the default landing page"
+        }
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "summary": "Add site-wide footer with hospital info, contact details, and tagline",
+      "acceptanceCriteria": [
+        "Footer displays on all public pages",
+        "Contains full address, email, all phone/WhatsApp numbers",
+        "Includes a tagline like 'Your Health, Our Mission'",
+        "Copyright line reads '© 2024 SAMPARC MEDICAL. All Rights Reserved.'"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Layout.tsx",
+          "operation": "modify",
+          "description": "Add footer section to Layout component displaying hospital name (SAMPARC MEDICAL), full address, email (samparc6@gmail.com), all phone/WhatsApp numbers (+91 9766343454, +91 9270556455, +91 9766343456) with wa.me links, tagline 'Your Health, Our Mission', and copyright notice '© 2024 SAMPARC MEDICAL. All Rights Reserved.'"
+        }
+      ]
+    }
+  ]
+}
