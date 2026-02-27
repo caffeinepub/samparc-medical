@@ -1,16 +1,20 @@
 import { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { LayoutDashboard, Pill, FileEdit, LogOut, Menu, X, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Pill, FileEdit, LogOut, Menu, ChevronRight, CalendarCheck, Store } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import Overview from './Overview';
 import MedicinesManager from './MedicinesManager';
 import ContentEditor from './ContentEditor';
+import AppointmentsManager from './AppointmentsManager';
+import SellersManager from './SellersManager';
 
-type Section = 'overview' | 'medicines' | 'content';
+type Section = 'overview' | 'medicines' | 'content' | 'appointments' | 'sellers';
 
 const navItems = [
   { id: 'overview' as Section, label: 'Overview', icon: LayoutDashboard },
+  { id: 'appointments' as Section, label: 'Appointments', icon: CalendarCheck },
   { id: 'medicines' as Section, label: 'Medicines', icon: Pill },
+  { id: 'sellers' as Section, label: 'Sellers', icon: Store },
   { id: 'content' as Section, label: 'Content Editor', icon: FileEdit },
 ];
 
@@ -28,7 +32,9 @@ export default function Dashboard() {
   const renderSection = () => {
     switch (activeSection) {
       case 'overview': return <Overview />;
+      case 'appointments': return <AppointmentsManager />;
       case 'medicines': return <MedicinesManager />;
+      case 'sellers': return <SellersManager />;
       case 'content': return <ContentEditor />;
     }
   };
@@ -37,8 +43,10 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar Overlay (mobile) */}
       {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+        <button
+          type="button"
+          aria-label="Close sidebar"
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden w-full h-full"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -66,6 +74,7 @@ export default function Dashboard() {
           {navItems.map((item) => (
             <button
               key={item.id}
+              type="button"
               onClick={() => { setActiveSection(item.id); setSidebarOpen(false); }}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                 activeSection === item.id
@@ -83,6 +92,7 @@ export default function Dashboard() {
         {/* Logout */}
         <div className="p-4 border-t border-white/10">
           <button
+            type="button"
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-300 hover:bg-red-500/20 hover:text-red-200 transition-all"
           >
@@ -98,6 +108,7 @@ export default function Dashboard() {
         <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4 flex items-center justify-between sticky top-0 z-30">
           <div className="flex items-center gap-3">
             <button
+              type="button"
               onClick={() => setSidebarOpen(true)}
               className="lg:hidden p-2 rounded-lg hover:bg-gray-100 text-gray-600"
             >
@@ -111,6 +122,7 @@ export default function Dashboard() {
             </div>
           </div>
           <button
+            type="button"
             onClick={handleLogout}
             className="hidden sm:flex items-center gap-2 text-sm text-red-500 hover:text-red-700 font-medium px-3 py-1.5 rounded-lg hover:bg-red-50 transition-all"
           >

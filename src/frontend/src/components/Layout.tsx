@@ -1,8 +1,10 @@
-import { Link, useRouterState, Outlet } from '@tanstack/react-router';
+import { Link, useRouterState, Outlet, useNavigate } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
-import { Menu, X, Phone, Mail, MapPin, Heart } from 'lucide-react';
+import { Menu, X, Phone, Mail, MapPin, Heart, User, LogOut, Store } from 'lucide-react';
 import { SiWhatsapp } from 'react-icons/si';
+import { toast } from 'sonner';
 import ChatAssistant from './ChatAssistant';
+import { useCustomerAuth } from '../hooks/useCustomerAuth';
 
 const navLinks = [
   { label: 'Home', path: '/' },
@@ -13,16 +15,24 @@ const navLinks = [
 ];
 
 export default function Layout() {
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
+  const { currentCustomer, logoutCustomer, isCustomerLoggedIn } = useCustomerAuth();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleLogout = () => {
+    logoutCustomer();
+    toast.success('Logged out successfully.');
+    navigate({ to: '/' });
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -53,23 +63,13 @@ export default function Layout() {
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 group">
               <img
-                src="/assets/generated/samparc-medical-logo.dim_400x120.png"
+                src="/assets/uploads/IMG-20260227-WA0000-1-1.jpg"
                 alt="SAMPARC MEDICAL Logo"
-                className="h-14 w-auto object-contain"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                  const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                  if (fallback) fallback.style.display = 'flex';
-                }}
+                className="h-12 w-12 object-cover rounded-full ring-2 ring-medical-primary/30 group-hover:ring-medical-primary transition-all duration-300 shadow-md"
               />
-              <div className="hidden items-center gap-2" style={{ display: 'none' }}>
-                <div className="w-10 h-10 bg-medical-primary rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">✚</span>
-                </div>
-                <div>
-                  <div className="text-medical-primary font-extrabold text-xl leading-tight tracking-wide">SAMPARC</div>
-                  <div className="text-gold font-bold text-sm tracking-widest">MEDICAL</div>
-                </div>
+              <div>
+                <div className="text-medical-primary font-extrabold text-xl leading-tight tracking-wide">SAMPARC</div>
+                <div className="text-gold font-bold text-xs tracking-widest">MEDICAL</div>
               </div>
             </Link>
 
@@ -88,7 +88,35 @@ export default function Layout() {
                   {link.label}
                 </Link>
               ))}
-
+              {/* Seller Portal link */}
+              <Link
+                to="/seller/login"
+                className="ml-1 flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-semibold text-teal-700 hover:bg-teal-50 border border-teal-200 hover:border-teal-400 transition-all"
+              >
+                <Store size={14} /> Seller Portal
+              </Link>
+              {/* Customer auth */}
+              {isCustomerLoggedIn && currentCustomer ? (
+                <div className="flex items-center gap-2 ml-2">
+                  <span className="flex items-center gap-1.5 px-3 py-2 bg-medical-light text-medical-primary rounded-md text-sm font-semibold">
+                    <User size={14} /> {currentCustomer.name.split(' ')[0]}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-semibold text-gray-600 hover:bg-red-50 hover:text-red-600 transition-all"
+                  >
+                    <LogOut size={14} /> Logout
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  to="/customer/login"
+                  className="ml-2 flex items-center gap-1.5 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-md text-sm font-semibold transition-all shadow-sm"
+                >
+                  <User size={14} /> Login
+                </Link>
+              )}
             </nav>
 
             {/* Mobile Menu Button */}
@@ -121,7 +149,37 @@ export default function Layout() {
                   {link.label}
                 </Link>
               ))}
-
+              <div className="pt-2 border-t border-gray-100 space-y-1">
+                <Link
+                  to="/seller/login"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-2 px-4 py-3 rounded-md text-sm font-semibold text-teal-700 bg-teal-50 border border-teal-200"
+                >
+                  <Store size={14} /> Seller Portal
+                </Link>
+                {isCustomerLoggedIn && currentCustomer ? (
+                  <>
+                    <p className="px-4 py-2 text-sm font-semibold text-medical-primary flex items-center gap-2">
+                      <User size={14} /> {currentCustomer.name}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => { handleLogout(); setMobileOpen(false); }}
+                      className="w-full text-left px-4 py-3 rounded-md text-sm font-semibold text-red-600 hover:bg-red-50 transition-all flex items-center gap-2"
+                    >
+                      <LogOut size={14} /> Logout
+                    </button>
+                  </>
+                ) : (
+                  <Link
+                    to="/customer/login"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center gap-2 px-4 py-3 rounded-md text-sm font-semibold bg-rose-600 text-white"
+                  >
+                    <User size={14} /> Customer Login
+                  </Link>
+                )}
+              </div>
             </div>
           </div>
         )}
@@ -139,9 +197,11 @@ export default function Layout() {
             {/* Brand */}
             <div className="lg:col-span-1">
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 bg-medical-primary rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">✚</span>
-                </div>
+                <img
+                  src="/assets/uploads/IMG-20260227-WA0000-1-1.jpg"
+                  alt="SAMPARC MEDICAL Logo"
+                  className="w-10 h-10 object-cover rounded-full ring-2 ring-medical-primary/50 shadow-md"
+                />
                 <div>
                   <div className="text-white font-extrabold text-lg leading-tight">SAMPARC</div>
                   <div className="text-gold font-bold text-xs tracking-widest">MEDICAL</div>
@@ -164,6 +224,16 @@ export default function Layout() {
                     </Link>
                   </li>
                 ))}
+                <li>
+                  <Link to="/seller/login" className="text-gray-400 hover:text-gold transition-colors text-sm flex items-center gap-1.5">
+                    <Store size={12} className="text-teal-400" /> Seller Portal
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/customer/login" className="text-gray-400 hover:text-gold transition-colors text-sm flex items-center gap-1.5">
+                    <User size={12} className="text-medical-primary" /> Customer Login
+                  </Link>
+                </li>
               </ul>
             </div>
 
