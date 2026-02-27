@@ -13,14 +13,20 @@ import CustomerSignup from './pages/customer/CustomerSignup';
 import SellerLogin from './pages/seller/SellerLogin';
 import SellerSignup from './pages/seller/SellerSignup';
 import SellerDashboard from './pages/seller/SellerDashboard';
+import { useSeedAdminSeller } from './hooks/useSeedAdminSeller';
 
-const rootRoute = createRootRoute({
-  component: () => (
+function RootComponent() {
+  useSeedAdminSeller();
+  return (
     <>
       <Outlet />
       <Toaster richColors position="top-right" />
     </>
-  ),
+  );
+}
+
+const rootRoute = createRootRoute({
+  component: RootComponent,
 });
 
 const publicLayoutRoute = createRoute({
