@@ -8,6 +8,11 @@ import Medicines from './pages/Medicines';
 import Contact from './pages/Contact';
 import AdminLogin from './pages/admin/AdminLogin';
 import Dashboard from './pages/admin/Dashboard';
+import CustomerLogin from './pages/customer/CustomerLogin';
+import CustomerSignup from './pages/customer/CustomerSignup';
+import SellerLogin from './pages/seller/SellerLogin';
+import SellerSignup from './pages/seller/SellerSignup';
+import SellerDashboard from './pages/seller/SellerDashboard';
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -72,6 +77,44 @@ const adminDashboardRoute = createRoute({
   component: Dashboard,
 });
 
+// Customer auth routes (standalone, no layout)
+const customerLoginRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/customer/login',
+  component: CustomerLogin,
+});
+
+const customerSignupRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/customer/signup',
+  component: CustomerSignup,
+});
+
+// Seller auth routes (standalone, no layout)
+const sellerLoginRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/seller/login',
+  component: SellerLogin,
+});
+
+const sellerSignupRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/seller/signup',
+  component: SellerSignup,
+});
+
+const sellerDashboardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/seller/dashboard',
+  beforeLoad: () => {
+    const sellerRaw = localStorage.getItem('samparc_seller');
+    if (!sellerRaw) {
+      throw redirect({ to: '/seller/login' });
+    }
+  },
+  component: SellerDashboard,
+});
+
 const routeTree = rootRoute.addChildren([
   publicLayoutRoute.addChildren([
     homeRoute,
@@ -82,6 +125,11 @@ const routeTree = rootRoute.addChildren([
   ]),
   adminLoginRoute,
   adminDashboardRoute,
+  customerLoginRoute,
+  customerSignupRoute,
+  sellerLoginRoute,
+  sellerSignupRoute,
+  sellerDashboardRoute,
 ]);
 
 const router = createRouter({ routeTree });

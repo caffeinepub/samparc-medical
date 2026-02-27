@@ -3,11 +3,11 @@ import { Link, useNavigate } from '@tanstack/react-router';
 import {
   Stethoscope, Pill, FlaskConical, HeartPulse, Ambulance,
   ShieldCheck, Users, Award, Clock, ChevronRight, Star, X, CalendarCheck, Loader2,
-  Store, UserPlus, LogIn, CheckCircle2
+  Store, UserPlus, LogIn, CheckCircle2, ClipboardList, Calendar, AlertCircle
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { useGetContent, useSubmitAppointment } from '../hooks/useQueries';
-import { getCustomerSession } from '../hooks/useCustomerAuth';
+import { useGetContent, useSubmitAppointment, useListAppointments } from '../hooks/useQueries';
+import { getCustomerSession, useCustomerAuth } from '../hooks/useCustomerAuth';
 
 const FORMSPREE_URL = 'https://formspree.io/f/xpwrqdbd';
 
@@ -21,11 +21,16 @@ const departments = [
   'Other',
 ];
 
-function AppointmentModal({ onClose }: { onClose: () => void }) {
+interface AppointmentModalProps {
+  onClose: () => void;
+  prefill?: { patientName?: string; phone?: string; email?: string };
+}
+
+function AppointmentModal({ onClose, prefill }: AppointmentModalProps) {
   const [form, setForm] = useState({
-    patientName: '',
-    phone: '',
-    email: '',
+    patientName: prefill?.patientName ?? '',
+    phone: prefill?.phone ?? '',
+    email: prefill?.email ?? '',
     department: '',
     preferredDate: '',
     message: '',
@@ -270,6 +275,8 @@ const testimonials = [
 export default function Home() {
   const navigate = useNavigate();
   const { data: heroContent } = useGetContent('hero');
+  const { currentCustomer, isCustomerLoggedIn } = useCustomerAuth();
+  const { data: allAppointments } = useListAppointments();
   const heroSection = useIntersectionObserver();
   const servicesSection = useIntersectionObserver();
   const statsSection = useIntersectionObserver();
@@ -278,10 +285,24 @@ export default function Home() {
   const [heroVisible, setHeroVisible] = useState(false);
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
 
+  // Filter appointments for logged-in customer only
+  const myAppointments = isCustomerLoggedIn && currentCustomer
+    ? (allAppointments ?? []).filter(appt => appt.email === currentCustomer.email)
+    : [];
+
   useEffect(() => {
     const timer = setTimeout(() => setHeroVisible(true), 100);
+    // Check if ?book=1 is in URL to auto-open modal
+    if (window.location.search.includes('book=1')) {
+      const session = getCustomerSession();
+      if (session) {
+        setTimeout(() => setShowAppointmentModal(true), 300);
+      } else {
+        navigate({ to: '/customer/login' });
+      }
+    }
     return () => clearTimeout(timer);
-  }, []);
+  }, [navigate]);
 
   const handleBookAppointment = () => {
     const session = getCustomerSession();
@@ -293,9 +314,34 @@ export default function Home() {
     setShowAppointmentModal(true);
   };
 
+  const getStatusStyle = (status: string) => {
+    switch (status) {
+      case 'Confirmed': return 'bg-green-100 text-green-700 border-green-200';
+      case 'Cancelled': return 'bg-red-100 text-red-700 border-red-200';
+      default: return 'bg-amber-100 text-amber-700 border-amber-200';
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'Confirmed': return <CheckCircle2 size={12} />;
+      case 'Cancelled': return <AlertCircle size={12} />;
+      default: return <Clock size={12} />;
+    }
+  };
+
   return (
     <div className="overflow-hidden">
-      {showAppointmentModal && <AppointmentModal onClose={() => setShowAppointmentModal(false)} />}
+      {showAppointmentModal && (
+        <AppointmentModal
+          onClose={() => setShowAppointmentModal(false)}
+          prefill={currentCustomer ? {
+            patientName: currentCustomer.name,
+            phone: currentCustomer.phone,
+            email: currentCustomer.email,
+          } : undefined}
+        />
+      )}
       {/* Hero Section */}
       <section className="relative min-h-[85vh] flex items-center overflow-hidden">
         {/* Background */}
@@ -390,6 +436,83 @@ export default function Home() {
           <div className="w-0.5 h-6 bg-rose-400/40 rounded-full"></div>
         </div>
       </section>
+
+      {/* My Appointments Section — only for logged-in customers */}
+      {isCustomerLoggedIn && currentCustomer && (
+        <section id="my-appointments" className="py-12 bg-gradient-to-br from-rose-50 via-pink-50 to-white border-b border-rose-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            {/* Section header */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-rose-100 rounded-xl flex items-center justify-center">
+                  <ClipboardList size={20} className="text-rose-600" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-extrabold text-gray-900 leading-tight">
+                    My Appointments
+                    {myAppointments.length > 0 && (
+                      <span className="ml-2 inline-flex items-center justify-center w-6 h-6 text-xs font-bold bg-rose-600 text-white rounded-full">
+                        {myAppointments.length}
+                      </span>
+                    )}
+                  </h2>
+                  <p className="text-sm text-gray-500">Welcome back, <strong className="text-rose-600">{currentCustomer.name.split(' ')[0]}</strong></p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={handleBookAppointment}
+                className="inline-flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md shadow-rose-200 hover:shadow-lg hover:-translate-y-0.5 self-start sm:self-auto"
+              >
+                <CalendarCheck size={16} /> Book New Appointment
+              </button>
+            </div>
+
+            {/* Appointments grid */}
+            {myAppointments.length === 0 ? (
+              <div className="bg-white rounded-2xl border border-rose-100 p-10 text-center shadow-sm">
+                <div className="w-16 h-16 bg-rose-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Calendar size={28} className="text-rose-300" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-700 mb-2">No appointments yet</h3>
+                <p className="text-gray-500 text-sm mb-5">Book your first appointment with our specialists today.</p>
+                <button
+                  type="button"
+                  onClick={handleBookAppointment}
+                  className="inline-flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-md shadow-rose-100"
+                >
+                  <CalendarCheck size={16} /> Book Appointment
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {myAppointments.map((appt) => (
+                  <div key={appt.id.toString()} className="bg-white rounded-2xl border border-rose-100 p-5 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="w-10 h-10 bg-rose-50 rounded-xl flex items-center justify-center">
+                        <CalendarCheck size={18} className="text-rose-500" />
+                      </div>
+                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${getStatusStyle(appt.status)}`}>
+                        {getStatusIcon(appt.status)}
+                        {appt.status}
+                      </span>
+                    </div>
+                    <h3 className="font-bold text-gray-900 mb-1 truncate">{appt.patientName}</h3>
+                    <p className="text-sm text-rose-600 font-medium mb-3">{appt.department}</p>
+                    <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                      <Calendar size={12} className="text-gray-400" />
+                      <span>{appt.preferredDate}</span>
+                    </div>
+                    {appt.message && (
+                      <p className="text-xs text-gray-400 mt-2 line-clamp-2 italic">"{appt.message}"</p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Stats Bar */}
       <section ref={statsSection.ref} className="bg-medical-primary py-8">

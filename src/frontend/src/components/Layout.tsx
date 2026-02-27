@@ -1,6 +1,6 @@
 import { Link, useRouterState, Outlet, useNavigate } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
-import { Menu, X, Phone, Mail, MapPin, Heart, User, LogOut, Store } from 'lucide-react';
+import { Menu, X, Phone, Mail, MapPin, Heart, User, LogOut, Store, CalendarCheck, ClipboardList } from 'lucide-react';
 import { SiWhatsapp } from 'react-icons/si';
 import { toast } from 'sonner';
 import ChatAssistant from './ChatAssistant';
@@ -97,7 +97,19 @@ export default function Layout() {
               </Link>
               {/* Customer auth */}
               {isCustomerLoggedIn && currentCustomer ? (
-                <div className="flex items-center gap-2 ml-2">
+                <div className="flex items-center gap-1.5 ml-2">
+                  <a
+                    href="/?book=1"
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-semibold text-rose-700 hover:bg-rose-50 border border-rose-200 hover:border-rose-400 transition-all"
+                  >
+                    <CalendarCheck size={14} /> Book Appointment
+                  </a>
+                  <a
+                    href="/#my-appointments"
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-semibold text-rose-700 hover:bg-rose-50 border border-rose-200 hover:border-rose-400 transition-all"
+                  >
+                    <ClipboardList size={14} /> My Appointments
+                  </a>
                   <span className="flex items-center gap-1.5 px-3 py-2 bg-medical-light text-medical-primary rounded-md text-sm font-semibold">
                     <User size={14} /> {currentCustomer.name.split(' ')[0]}
                   </span>
@@ -162,6 +174,20 @@ export default function Layout() {
                     <p className="px-4 py-2 text-sm font-semibold text-medical-primary flex items-center gap-2">
                       <User size={14} /> {currentCustomer.name}
                     </p>
+                    <a
+                      href="/?book=1"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center gap-2 px-4 py-3 rounded-md text-sm font-semibold text-rose-700 bg-rose-50 border border-rose-200"
+                    >
+                      <CalendarCheck size={14} /> Book Appointment
+                    </a>
+                    <a
+                      href="/#my-appointments"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center gap-2 px-4 py-3 rounded-md text-sm font-semibold text-rose-700 bg-rose-50 border border-rose-200"
+                    >
+                      <ClipboardList size={14} /> My Appointments
+                    </a>
                     <button
                       type="button"
                       onClick={() => { handleLogout(); setMobileOpen(false); }}

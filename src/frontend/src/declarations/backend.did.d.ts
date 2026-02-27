@@ -30,6 +30,14 @@ export interface Customer {
   'passwordHash' : string,
   'phone' : string,
 }
+export interface CustomerCredentials {
+  'id' : CustomerId,
+  'name' : string,
+  'createdAt' : bigint,
+  'email' : string,
+  'passwordHash' : string,
+  'phone' : string,
+}
 export type CustomerId = bigint;
 export interface Medicine {
   'id' : MedicineId,
@@ -47,6 +55,16 @@ export interface Seller {
   'name' : string,
   'createdAt' : bigint,
   'documentsSubmitted' : Array<string>,
+  'businessName' : string,
+  'email' : string,
+  'passwordHash' : string,
+  'phone' : string,
+}
+export interface SellerCredentials {
+  'id' : SellerId,
+  'status' : SellerStatus,
+  'name' : string,
+  'createdAt' : bigint,
   'businessName' : string,
   'email' : string,
   'passwordHash' : string,
@@ -124,8 +142,10 @@ export interface _SERVICE {
   'getSellerByEmail' : ActorMethod<[string], [] | [Seller]>,
   'listAllSellerMedicines' : ActorMethod<[], Array<SellerMedicine>>,
   'listAppointments' : ActorMethod<[], Array<Appointment>>,
+  'listCustomerCredentials' : ActorMethod<[], Array<CustomerCredentials>>,
   'listCustomers' : ActorMethod<[], Array<Customer>>,
   'listMedicines' : ActorMethod<[], Array<Medicine>>,
+  'listSellerCredentials' : ActorMethod<[], Array<SellerCredentials>>,
   'listSellerMedicines' : ActorMethod<[SellerId], Array<SellerMedicine>>,
   'listSellers' : ActorMethod<[], Array<Seller>>,
   'loginCustomer' : ActorMethod<[string, string], Customer>,

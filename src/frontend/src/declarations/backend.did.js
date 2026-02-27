@@ -79,6 +79,24 @@ export const Appointment = IDL.Record({
   'phone' : IDL.Text,
   'department' : IDL.Text,
 });
+export const CustomerCredentials = IDL.Record({
+  'id' : CustomerId,
+  'name' : IDL.Text,
+  'createdAt' : IDL.Int,
+  'email' : IDL.Text,
+  'passwordHash' : IDL.Text,
+  'phone' : IDL.Text,
+});
+export const SellerCredentials = IDL.Record({
+  'id' : SellerId,
+  'status' : SellerStatus,
+  'name' : IDL.Text,
+  'createdAt' : IDL.Int,
+  'businessName' : IDL.Text,
+  'email' : IDL.Text,
+  'passwordHash' : IDL.Text,
+  'phone' : IDL.Text,
+});
 
 export const idlService = IDL.Service({
   '_caffeineStorageBlobIsLive' : IDL.Func(
@@ -151,8 +169,18 @@ export const idlService = IDL.Service({
   'getSellerByEmail' : IDL.Func([IDL.Text], [IDL.Opt(Seller)], ['query']),
   'listAllSellerMedicines' : IDL.Func([], [IDL.Vec(SellerMedicine)], ['query']),
   'listAppointments' : IDL.Func([], [IDL.Vec(Appointment)], ['query']),
+  'listCustomerCredentials' : IDL.Func(
+      [],
+      [IDL.Vec(CustomerCredentials)],
+      ['query'],
+    ),
   'listCustomers' : IDL.Func([], [IDL.Vec(Customer)], ['query']),
   'listMedicines' : IDL.Func([], [IDL.Vec(Medicine)], ['query']),
+  'listSellerCredentials' : IDL.Func(
+      [],
+      [IDL.Vec(SellerCredentials)],
+      ['query'],
+    ),
   'listSellerMedicines' : IDL.Func(
       [SellerId],
       [IDL.Vec(SellerMedicine)],
@@ -256,6 +284,24 @@ export const idlFactory = ({ IDL }) => {
     'phone' : IDL.Text,
     'department' : IDL.Text,
   });
+  const CustomerCredentials = IDL.Record({
+    'id' : CustomerId,
+    'name' : IDL.Text,
+    'createdAt' : IDL.Int,
+    'email' : IDL.Text,
+    'passwordHash' : IDL.Text,
+    'phone' : IDL.Text,
+  });
+  const SellerCredentials = IDL.Record({
+    'id' : SellerId,
+    'status' : SellerStatus,
+    'name' : IDL.Text,
+    'createdAt' : IDL.Int,
+    'businessName' : IDL.Text,
+    'email' : IDL.Text,
+    'passwordHash' : IDL.Text,
+    'phone' : IDL.Text,
+  });
   
   return IDL.Service({
     '_caffeineStorageBlobIsLive' : IDL.Func(
@@ -332,8 +378,18 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'listAppointments' : IDL.Func([], [IDL.Vec(Appointment)], ['query']),
+    'listCustomerCredentials' : IDL.Func(
+        [],
+        [IDL.Vec(CustomerCredentials)],
+        ['query'],
+      ),
     'listCustomers' : IDL.Func([], [IDL.Vec(Customer)], ['query']),
     'listMedicines' : IDL.Func([], [IDL.Vec(Medicine)], ['query']),
+    'listSellerCredentials' : IDL.Func(
+        [],
+        [IDL.Vec(SellerCredentials)],
+        ['query'],
+      ),
     'listSellerMedicines' : IDL.Func(
         [SellerId],
         [IDL.Vec(SellerMedicine)],

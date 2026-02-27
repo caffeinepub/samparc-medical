@@ -104,7 +104,14 @@ export interface Seller {
     phone: string;
 }
 export type SellerId = bigint;
-export type AppointmentId = bigint;
+export interface CustomerCredentials {
+    id: CustomerId;
+    name: string;
+    createdAt: bigint;
+    email: string;
+    passwordHash: string;
+    phone: string;
+}
 export interface _CaffeineStorageCreateCertificateResult {
     method: string;
     blob_hash: string;
@@ -113,6 +120,17 @@ export interface Customer {
     id: CustomerId;
     name: string;
     createdAt: bigint;
+    email: string;
+    passwordHash: string;
+    phone: string;
+}
+export type AppointmentId = bigint;
+export interface SellerCredentials {
+    id: SellerId;
+    status: SellerStatus;
+    name: string;
+    createdAt: bigint;
+    businessName: string;
     email: string;
     passwordHash: string;
     phone: string;
@@ -187,8 +205,10 @@ export interface backendInterface {
     getSellerByEmail(email: string): Promise<Seller | null>;
     listAllSellerMedicines(): Promise<Array<SellerMedicine>>;
     listAppointments(): Promise<Array<Appointment>>;
+    listCustomerCredentials(): Promise<Array<CustomerCredentials>>;
     listCustomers(): Promise<Array<Customer>>;
     listMedicines(): Promise<Array<Medicine>>;
+    listSellerCredentials(): Promise<Array<SellerCredentials>>;
     listSellerMedicines(sellerId: SellerId): Promise<Array<SellerMedicine>>;
     listSellers(): Promise<Array<Seller>>;
     loginCustomer(email: string, passwordHash: string): Promise<Customer>;
@@ -201,7 +221,7 @@ export interface backendInterface {
     updateContent(section: SectionName, content: string): Promise<void>;
     updateSellerStatus(id: SellerId, status: SellerStatus): Promise<void>;
 }
-import type { Seller as _Seller, SellerId as _SellerId, SellerStatus as _SellerStatus, _CaffeineStorageRefillInformation as __CaffeineStorageRefillInformation, _CaffeineStorageRefillResult as __CaffeineStorageRefillResult } from "./declarations/backend.did.d.ts";
+import type { Seller as _Seller, SellerCredentials as _SellerCredentials, SellerId as _SellerId, SellerStatus as _SellerStatus, _CaffeineStorageRefillInformation as __CaffeineStorageRefillInformation, _CaffeineStorageRefillResult as __CaffeineStorageRefillResult } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
     async _caffeineStorageBlobIsLive(arg0: Uint8Array): Promise<boolean> {
@@ -568,6 +588,20 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async listCustomerCredentials(): Promise<Array<CustomerCredentials>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.listCustomerCredentials();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.listCustomerCredentials();
+            return result;
+        }
+    }
     async listCustomers(): Promise<Array<Customer>> {
         if (this.processError) {
             try {
@@ -596,6 +630,20 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async listSellerCredentials(): Promise<Array<SellerCredentials>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.listSellerCredentials();
+                return from_candid_vec_n13(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.listSellerCredentials();
+            return from_candid_vec_n13(this._uploadFile, this._downloadFile, result);
+        }
+    }
     async listSellerMedicines(arg0: SellerId): Promise<Array<SellerMedicine>> {
         if (this.processError) {
             try {
@@ -614,14 +662,14 @@ export class Backend implements backendInterface {
         if (this.processError) {
             try {
                 const result = await this.actor.listSellers();
-                return from_candid_vec_n13(this._uploadFile, this._downloadFile, result);
+                return from_candid_vec_n16(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.listSellers();
-            return from_candid_vec_n13(this._uploadFile, this._downloadFile, result);
+            return from_candid_vec_n16(this._uploadFile, this._downloadFile, result);
         }
     }
     async loginCustomer(arg0: string, arg1: string): Promise<Customer> {
@@ -739,17 +787,20 @@ export class Backend implements backendInterface {
     async updateSellerStatus(arg0: SellerId, arg1: SellerStatus): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.updateSellerStatus(arg0, to_candid_SellerStatus_n14(this._uploadFile, this._downloadFile, arg1));
+                const result = await this.actor.updateSellerStatus(arg0, to_candid_SellerStatus_n17(this._uploadFile, this._downloadFile, arg1));
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.updateSellerStatus(arg0, to_candid_SellerStatus_n14(this._uploadFile, this._downloadFile, arg1));
+            const result = await this.actor.updateSellerStatus(arg0, to_candid_SellerStatus_n17(this._uploadFile, this._downloadFile, arg1));
             return result;
         }
     }
+}
+function from_candid_SellerCredentials_n14(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _SellerCredentials): SellerCredentials {
+    return from_candid_record_n15(_uploadFile, _downloadFile, value);
 }
 function from_candid_SellerStatus_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _SellerStatus): SellerStatus {
     return from_candid_variant_n11(_uploadFile, _downloadFile, value);
@@ -768,6 +819,36 @@ function from_candid_opt_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Ar
 }
 function from_candid_opt_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [bigint]): bigint | null {
     return value.length === 0 ? null : value[0];
+}
+function from_candid_record_n15(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    id: _SellerId;
+    status: _SellerStatus;
+    name: string;
+    createdAt: bigint;
+    businessName: string;
+    email: string;
+    passwordHash: string;
+    phone: string;
+}): {
+    id: SellerId;
+    status: SellerStatus;
+    name: string;
+    createdAt: bigint;
+    businessName: string;
+    email: string;
+    passwordHash: string;
+    phone: string;
+} {
+    return {
+        id: value.id,
+        status: from_candid_SellerStatus_n10(_uploadFile, _downloadFile, value.status),
+        name: value.name,
+        createdAt: value.createdAt,
+        businessName: value.businessName,
+        email: value.email,
+        passwordHash: value.passwordHash,
+        phone: value.phone
+    };
 }
 function from_candid_record_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     success: [] | [boolean];
@@ -825,11 +906,14 @@ function from_candid_variant_n11(_uploadFile: (file: ExternalBlob) => Promise<Ui
 }): SellerStatus {
     return "Approved" in value ? SellerStatus.Approved : "Suspended" in value ? SellerStatus.Suspended : "Rejected" in value ? SellerStatus.Rejected : "Pending" in value ? SellerStatus.Pending : value;
 }
-function from_candid_vec_n13(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_Seller>): Array<Seller> {
+function from_candid_vec_n13(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_SellerCredentials>): Array<SellerCredentials> {
+    return value.map((x)=>from_candid_SellerCredentials_n14(_uploadFile, _downloadFile, x));
+}
+function from_candid_vec_n16(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_Seller>): Array<Seller> {
     return value.map((x)=>from_candid_Seller_n8(_uploadFile, _downloadFile, x));
 }
-function to_candid_SellerStatus_n14(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: SellerStatus): _SellerStatus {
-    return to_candid_variant_n15(_uploadFile, _downloadFile, value);
+function to_candid_SellerStatus_n17(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: SellerStatus): _SellerStatus {
+    return to_candid_variant_n18(_uploadFile, _downloadFile, value);
 }
 function to_candid__CaffeineStorageRefillInformation_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _CaffeineStorageRefillInformation): __CaffeineStorageRefillInformation {
     return to_candid_record_n3(_uploadFile, _downloadFile, value);
@@ -846,7 +930,7 @@ function to_candid_record_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8A
         proposed_top_up_amount: value.proposed_top_up_amount ? candid_some(value.proposed_top_up_amount) : candid_none()
     };
 }
-function to_candid_variant_n15(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: SellerStatus): {
+function to_candid_variant_n18(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: SellerStatus): {
     Approved: null;
 } | {
     Suspended: null;

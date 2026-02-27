@@ -19,11 +19,29 @@ export interface Seller {
     phone: string;
 }
 export type SellerId = bigint;
-export type AppointmentId = bigint;
+export interface CustomerCredentials {
+    id: CustomerId;
+    name: string;
+    createdAt: bigint;
+    email: string;
+    passwordHash: string;
+    phone: string;
+}
 export interface Customer {
     id: CustomerId;
     name: string;
     createdAt: bigint;
+    email: string;
+    passwordHash: string;
+    phone: string;
+}
+export type AppointmentId = bigint;
+export interface SellerCredentials {
+    id: SellerId;
+    status: SellerStatus;
+    name: string;
+    createdAt: bigint;
+    businessName: string;
     email: string;
     passwordHash: string;
     phone: string;
@@ -88,8 +106,10 @@ export interface backendInterface {
     getSellerByEmail(email: string): Promise<Seller | null>;
     listAllSellerMedicines(): Promise<Array<SellerMedicine>>;
     listAppointments(): Promise<Array<Appointment>>;
+    listCustomerCredentials(): Promise<Array<CustomerCredentials>>;
     listCustomers(): Promise<Array<Customer>>;
     listMedicines(): Promise<Array<Medicine>>;
+    listSellerCredentials(): Promise<Array<SellerCredentials>>;
     listSellerMedicines(sellerId: SellerId): Promise<Array<SellerMedicine>>;
     listSellers(): Promise<Array<Seller>>;
     loginCustomer(email: string, passwordHash: string): Promise<Customer>;

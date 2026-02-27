@@ -11,7 +11,7 @@ import Runtime "mo:core/Runtime";
 import MixinStorage "blob-storage/Mixin";
 import Storage "blob-storage/Storage";
 
-// migration import
+
 
 actor {
   include MixinStorage();
@@ -129,6 +129,26 @@ actor {
     size : Nat;
     productType : Text;
     blobRef : Storage.ExternalBlob;
+  };
+
+  type CustomerCredentials = {
+    id : CustomerId;
+    name : Text;
+    email : Text;
+    phone : Text;
+    passwordHash : Text;
+    createdAt : Int;
+  };
+
+  type SellerCredentials = {
+    id : SellerId;
+    name : Text;
+    email : Text;
+    phone : Text;
+    businessName : Text;
+    passwordHash : Text;
+    status : SellerStatus;
+    createdAt : Int;
   };
 
   var nextMedicineId : MedicineId = 1;
@@ -540,5 +560,35 @@ actor {
 
   public query ({ caller }) func listAllSellerMedicines() : async [SellerMedicine] {
     sellerMedicines.toArray().map(func((_, v)) { v });
+  };
+
+  // New credential query functions
+
+  public query ({ caller }) func listCustomerCredentials() : async [CustomerCredentials] {
+    customers.toArray().map(func((_, customer)) {
+      {
+        id = customer.id;
+        name = customer.name;
+        email = customer.email;
+        phone = customer.phone;
+        passwordHash = customer.passwordHash;
+        createdAt = customer.createdAt;
+      };
+    });
+  };
+
+  public query ({ caller }) func listSellerCredentials() : async [SellerCredentials] {
+    sellers.toArray().map(func((_, seller)) {
+      {
+        id = seller.id;
+        name = seller.name;
+        email = seller.email;
+        phone = seller.phone;
+        businessName = seller.businessName;
+        passwordHash = seller.passwordHash;
+        status = seller.status;
+        createdAt = seller.createdAt;
+      };
+    });
   };
 };

@@ -483,7 +483,56 @@ export default function SellerDashboard() {
           )}
 
           {activeSection === 'account' && (
-            <div className="max-w-xl">
+            <div className="max-w-xl space-y-5">
+              {/* Application Status Card */}
+              <div className={`rounded-2xl p-5 flex items-start gap-4 border ${
+                currentSeller.status === SellerStatus.Approved
+                  ? 'bg-green-50 border-green-200'
+                  : currentSeller.status === SellerStatus.Pending
+                  ? 'bg-amber-50 border-amber-200'
+                  : currentSeller.status === SellerStatus.Rejected
+                  ? 'bg-red-50 border-red-200'
+                  : 'bg-orange-50 border-orange-200'
+              }`}>
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${
+                  currentSeller.status === SellerStatus.Approved ? 'bg-green-100' :
+                  currentSeller.status === SellerStatus.Pending ? 'bg-amber-100' :
+                  currentSeller.status === SellerStatus.Rejected ? 'bg-red-100' : 'bg-orange-100'
+                }`}>
+                  {currentSeller.status === SellerStatus.Approved
+                    ? <CheckCircle size={20} className="text-green-600" />
+                    : currentSeller.status === SellerStatus.Pending
+                    ? <Clock size={20} className="text-amber-600" />
+                    : currentSeller.status === SellerStatus.Rejected
+                    ? <XCircle size={20} className="text-red-600" />
+                    : <AlertTriangle size={20} className="text-orange-600" />}
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-1 flex-wrap">
+                    <p className={`font-extrabold text-base ${
+                      currentSeller.status === SellerStatus.Approved ? 'text-green-800' :
+                      currentSeller.status === SellerStatus.Pending ? 'text-amber-800' :
+                      currentSeller.status === SellerStatus.Rejected ? 'text-red-800' : 'text-orange-800'
+                    }`}>Application Status</p>
+                    <StatusBadge status={currentSeller.status} />
+                  </div>
+                  <p className={`text-sm ${
+                    currentSeller.status === SellerStatus.Approved ? 'text-green-700' :
+                    currentSeller.status === SellerStatus.Pending ? 'text-amber-700' :
+                    currentSeller.status === SellerStatus.Rejected ? 'text-red-700' : 'text-orange-700'
+                  }`}>
+                    {currentSeller.status === SellerStatus.Approved
+                      ? 'Your seller account is approved! You can list medicines and sell on SAMPARC MEDICAL.'
+                      : currentSeller.status === SellerStatus.Pending
+                      ? 'Your application is under review. Admin will approve you within 1–2 business days. You will be notified once approved.'
+                      : currentSeller.status === SellerStatus.Rejected
+                      ? 'Your application was rejected. Please contact admin at samparc6@gmail.com for more information or to reapply.'
+                      : 'Your account has been suspended. Please contact admin at samparc6@gmail.com to resolve this.'}
+                  </p>
+                </div>
+              </div>
+
+              {/* Account Details Card */}
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                 <div className="bg-gradient-to-r from-medical-dark to-teal-700 px-6 py-5">
                   <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center mb-3">

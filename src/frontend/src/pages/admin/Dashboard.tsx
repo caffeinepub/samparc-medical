@@ -1,28 +1,37 @@
 import { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { LayoutDashboard, Pill, FileEdit, LogOut, Menu, ChevronRight, CalendarCheck, Store } from 'lucide-react';
+import { LayoutDashboard, Pill, FileEdit, LogOut, Menu, ChevronRight, CalendarCheck, Store, KeyRound } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import Overview from './Overview';
 import MedicinesManager from './MedicinesManager';
 import ContentEditor from './ContentEditor';
 import AppointmentsManager from './AppointmentsManager';
 import SellersManager from './SellersManager';
+import CredentialsManager from './CredentialsManager';
 
-type Section = 'overview' | 'medicines' | 'content' | 'appointments' | 'sellers';
+type Section = 'overview' | 'medicines' | 'content' | 'appointments' | 'sellers' | 'credentials';
 
 const navItems = [
   { id: 'overview' as Section, label: 'Overview', icon: LayoutDashboard },
   { id: 'appointments' as Section, label: 'Appointments', icon: CalendarCheck },
   { id: 'medicines' as Section, label: 'Medicines', icon: Pill },
   { id: 'sellers' as Section, label: 'Sellers', icon: Store },
+  { id: 'credentials' as Section, label: 'User Credentials', icon: KeyRound },
   { id: 'content' as Section, label: 'Content Editor', icon: FileEdit },
 ];
+
+const RESTRICTED_EMAIL = 'samparc2026@gmail.com';
+const RESTRICTED_SECTIONS: Section[] = ['credentials', 'content'];
 
 export default function Dashboard() {
   const [activeSection, setActiveSection] = useState<Section>('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { logout } = useAuth();
+  const { logout, adminEmail } = useAuth();
   const navigate = useNavigate();
+
+  const visibleNavItems = navItems.filter(
+    (item) => !(adminEmail === RESTRICTED_EMAIL && RESTRICTED_SECTIONS.includes(item.id))
+  );
 
   const handleLogout = () => {
     logout();
@@ -35,6 +44,7 @@ export default function Dashboard() {
       case 'appointments': return <AppointmentsManager />;
       case 'medicines': return <MedicinesManager />;
       case 'sellers': return <SellersManager />;
+      case 'credentials': return <CredentialsManager />;
       case 'content': return <ContentEditor />;
     }
   };
@@ -71,7 +81,7 @@ export default function Dashboard() {
 
         {/* Nav Items */}
         <nav className="flex-1 p-4 space-y-1">
-          {navItems.map((item) => (
+          {visibleNavItems.map((item) => (
             <button
               key={item.id}
               type="button"
@@ -116,7 +126,7 @@ export default function Dashboard() {
             </button>
             <div>
               <h1 className="font-bold text-gray-900 text-lg">
-                {navItems.find(n => n.id === activeSection)?.label}
+                {visibleNavItems.find(n => n.id === activeSection)?.label ?? navItems.find(n => n.id === activeSection)?.label}
               </h1>
               <p className="text-xs text-gray-500">SAMPARC MEDICAL Admin</p>
             </div>

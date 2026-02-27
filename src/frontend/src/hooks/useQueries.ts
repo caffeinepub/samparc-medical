@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
-import type { Medicine, Appointment, Seller, SellerMedicine, Customer } from '../backend';
+import type { Medicine, Appointment, Seller, SellerMedicine, Customer, CustomerCredentials, SellerCredentials } from '../backend';
 import { SellerStatus } from '../backend';
 
 export function useListMedicines() {
@@ -409,5 +409,31 @@ export function useDeleteSellerMedicine() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['sellerMedicines'] });
     },
+  });
+}
+
+// ── Credentials Queries ──────────────────────────────────────────────────────
+
+export function useListCustomerCredentials() {
+  const { actor, isFetching } = useActor();
+  return useQuery<CustomerCredentials[]>({
+    queryKey: ['customerCredentials'],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.listCustomerCredentials();
+    },
+    enabled: !!actor && !isFetching,
+  });
+}
+
+export function useListSellerCredentials() {
+  const { actor, isFetching } = useActor();
+  return useQuery<SellerCredentials[]>({
+    queryKey: ['sellerCredentials'],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.listSellerCredentials();
+    },
+    enabled: !!actor && !isFetching,
   });
 }
